@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<!-- namespace ,DAO的package路径  -->
+<mapper namespace="com.stusystem.dao.StudentDao"> 
+	<!-- 查询出多条学生信息 -->
+	<select id="getStudent" parameterType="com.stusystem.entity.StudentBean" resultType="com.stusystem.entity.StudentBean">
+		<if test=" stuName != null and stuName != '' "> SELECT * FROM student where stu_name = #{stuName} limit #{page} , 6 </if>
+		<if test=" stuName == null or stuName == '' "> SELECT * FROM student limit #{page} , 6 </if>
+	</select>
+	<!--分页处理  -->
+	<select id="getstupage" parameterType="com.stusystem.entity.StudentBean" resultType="int">
+		<if test=" stuName != null and stuName != '' "> select count(*) from student where stu_name = #{stuName} </if>
+		<if test=" stuName == null or stuName == '' "> select count(*) from student </if>
+	</select>
+	<!--根据id查询出一条学生信息-->
+	<select id="getStudentone" parameterType="com.stusystem.entity.StudentBean" resultType="com.stusystem.entity.StudentBean" >
+		SELECT * FROM student WHERE stu_id=#{stuId}
+	</select>
+	<!-- 删除一条学生信息  -->
+	<delete id="studentdel" parameterType="com.stusystem.entity.StudentBean" >
+		DELETE FROM student WHERE (stu_id=#{stuId})
+	</delete>
+	<!-- 修改一条学生信息 -->
+	<update id="studentxiugai" parameterType="com.stusystem.entity.StudentBean">
+		UPDATE student SET stu_name=#{stuName}, stu_sex=#{stuSex}, stu_system=#{stuSystem}, stu_phone=#{stuPhone}, stu_class=#{stuClass} WHERE (stu_id=#{stuId})
+	</update>
+	<!-- 添加一条学生信息 -->
+	<insert id="studentadd" parameterType="com.stusystem.entity.StudentBean">
+		INSERT INTO student (stu_name, stu_sex, stu_system, stu_phone, stu_class) VALUES (#{stuName},#{stuSex},#{stuSystem},#{stuPhone},#{stuClass})
+	</insert>
+</mapper>

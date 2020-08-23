@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<!-- namesapce ,DAO的package路径  -->
+<mapper namespace="com.stusystem.dao.UserDao">
+	<!-- 根据用户输入的用户名和密码查询是否存在此用户  -->
+	<select id="getUsrInfoByNameAndPsw" parameterType="userbean" resultType="userbean">
+		select * from user where user_id=#{userId} and password=#{password} and admin=#{admin}
+	</select>
+	<!-- 修改登录用户的密码  -->
+	<update id="mmxg" parameterType="userbean">
+		UPDATE user SET password = #{xmm} WHERE (user_id=#{userId})
+	</update>
+</mapper>

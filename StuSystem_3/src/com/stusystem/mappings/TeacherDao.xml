@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<!-- namespace ,DAO的package路径  -->
+<mapper namespace="com.stusystem.dao.TeacherDao">
+<select id="getTeacher" parameterType="teacherBean" resultType="teacherBean">
+<if test=" teacherName != null and teacherName != '' "> SELECT * FROM teacher where teacher_name = #{teacherName} limit #{page} , 6 </if>
+		<if test=" teacherName == null or teacherName == '' "> SELECT * FROM teacher limit #{page} , 6 </if>
+</select>
+<!-- 查询出所有教师信息可以分为多少页,在前端做分页处理  -->
+	<select id="getteapage" parameterType="teacherBean" resultType="int">
+		<if test=" teacherName != null and teacherName != '' "> select count(*) from `teacher` where teacher_name = #{teacherName} </if>
+		<if test=" teacherName == null or teacherName == '' "> select count(*) from `teacher` </if>
+	</select>
+	<!-- 根据id查询出一条教师信息  -->
+	<select id="getTeacherone" parameterType="teacherBean" resultType="teacherBean" >
+		SELECT * FROM teacher WHERE teacher_id=#{teacherId}
+	</select>
+	<!-- 删除一条教师记录  -->
+	<delete id="teacherdel" parameterType="teacherBean" >
+		DELETE FROM `teacher` WHERE (`teacher_id`=#{teacherId})
+	</delete>
+	<!--修改一条教师记录  -->
+	<update id="teacherxiugai" parameterType="teacherBean">
+		UPDATE teacher SET teacher_name=#{teacherName}, teacher_sex=#{teacherSex}, teacher_system=#{teacherSystem}, teacher_phone=#{teacherPhone}, teacher_email=#{teacherEmail} WHERE (teacher_id=#{teacherId})
+	</update>
+	<!-- 添加一条教师记录  -->
+	<insert id="teacheradd" parameterType="teacherBean">
+		INSERT INTO `teacher` (`teacher_name`, `teacher_sex`, `teacher_system`, `teacher_phone`, `teacher_email`) VALUES (#{teacherName},#{teacherSex},#{teacherSystem},#{teacherPhone},#{teacherEmail})
+	</insert>
+</mapper>

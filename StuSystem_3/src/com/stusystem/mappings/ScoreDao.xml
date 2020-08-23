@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<!-- namesapce ,DAO的package路径  -->
+<mapper namespace="com.stusystem.dao.ScoreDao"> 
+	<!-- 多表查询查询出一个学生的成绩和其他信息保存到一个score对象中  -->
+	<select id="getscorelist" parameterType="com.stusystem.entity.StudentBean" resultType="scoreBean">
+		SELECT score.score, `subject`.subject_name, score.score_id FROM score , `subject` WHERE score.subject_id = `subject`.subject_id AND score.student_id = #{stuId} 
+	</select>
+	<!-- 添加一个学生的成绩  -->
+	<update id="scoreadd" parameterType="scoreBean">
+		UPDATE score SET score=#{score} WHERE score_id=#{scoreId}
+	</update>
+	<!--查询一个学生的未选选课程信息list -->
+	<select id="getSubject" parameterType="scoreBean" resultType="com.stusystem.entity.SubjectBean">
+		<if test=" subjectName != null and subjectName != '' ">select * from `subject` where subject_name = #{subjectName} and subject_id not in (select subject_id from score where student_id = #{studentId} ) limit #{page} ,6 </if>
+		<if test=" subjectName == null or subjectName == '' "> SELECT * FROM subject where subject_id not in (select subject_id from score where student_id = #{studentId} ) limit #{page} ,6 </if>
+	</select>
+	<!-- 已选课程信息的分页处理  -->
+	<select id="getsbjpage" parameterType="scoreBean" resultType="int">
+		<if test=" subjectName != null and subjectName != '' ">select count(*) from `subject` where subject_name = #{subjectName} and subject_id not in (select subject_id from score where student_id = #{studentId} )</if>
+		<if test=" subjectName == null or subjectName == '' "> select count(*) from subject where subject_id not in (select subject_id from score where student_id = #{studentId} ) </if>
+	</select>
+	<!--添加一个学生的选课信息  -->
+	<insert id="setsubject" parameterType="scoreBean">
+		INSERT INTO `score` (`student_id`, `subject_id`) VALUES (#{studentId},#{subjectId})
+	</insert>
+	<!-- 查询一个学生已选课程信息的list-->
+	<select id="yxsubjectlist" parameterType="scoreBean" resultType="com.stusystem.entity.SubjectBean">
+		SELECT * FROM subject where subject_id in (select subject_id from score where student_id = #{studentId} )
+	</select>
+	<!-- 删除一条已选课程 -->
+	<delete id="delyxkc" parameterType="scoreBean">
+		DELETE FROM `score` WHERE `student_id`=#{studentId} and subject_id = #{subjectId} 
+	</delete>
+	<!-- 查询一个学生的已选课程成绩和课程信息的list-->
+	<select id="getscoreonelist" parameterType="scoreBean" resultType="scoreBean"> 
+		SELECT * FROM score , `subject` WHERE score.subject_id = `subject`.subject_id AND score.student_id = #{studentId} 
+	</select>
+</mapper>

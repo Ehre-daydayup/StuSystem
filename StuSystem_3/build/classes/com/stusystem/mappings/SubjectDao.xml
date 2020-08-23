@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<!-- namesapce ,DAO的package路径  -->
+<mapper namespace="com.stusystem.dao.SubjectDao"> 
+	<!-- 查询所有课程信息的list -->
+	<select id="getSubject" parameterType="com.stusystem.entity.SubjectBean" resultType="com.stusystem.entity.SubjectBean">
+		<if test=" subjectName != null and subjectName != '' "> SELECT * FROM subject where subject_name = #{subjectName} limit #{page} , 6 </if>
+		<if test=" subjectName == null or subjectName == '' "> SELECT * FROM subject limit #{page} , 6 </if>
+	</select>
+	<!-- 查询课程信息共有多少页,分页处理 -->
+	<select id="getsbjpage" parameterType="com.stusystem.entity.SubjectBean" resultType="int">
+		<if test=" subjectName != null and subjectName != '' "> select count(*) from `subject` where subject_name = #{subjectName} </if>
+		<if test=" subjectName == null or subjectName == '' "> select count(*) from `subject` </if>
+	</select>
+	<!-- 查询一条课程信息  -->
+	<select id="getSubjectone" parameterType="com.stusystem.entity.SubjectBean" resultType="com.stusystem.entity.SubjectBean" >
+		SELECT * FROM subject WHERE subject_id=#{subjectId}
+	</select>
+	<!-- 删除一条课程信息 -->
+	<delete id="subjectdel" parameterType="com.stusystem.entity.SubjectBean" >
+		DELETE FROM `subject` WHERE (`subject_id`=#{subjectId})
+	</delete>
+	<!-- 修改一条课程信息  -->
+	<update id="subjectxiugai" parameterType="com.stusystem.entity.SubjectBean">
+		UPDATE subject SET subject_name=#{subjectName}, teacher_name=#{teacherName}, subject_credit=#{subjectCredit} WHERE (subject_id=#{subjectId})
+	</update>
+	<!-- 添加一条课程信息  -->
+	<insert id="subjectadd" parameterType="com.stusystem.entity.SubjectBean">
+		INSERT INTO `subject` (`subject_name`, `teacher_name`, `subject_credit`) VALUES (#{subjectName},#{teacherName},#{subjectCredit})
+	</insert>
+</mapper>
