@@ -85,7 +85,7 @@
             <br/>
             <br/>
             <div class = "animated bounceInLeft">
-                © 2016 All Rights Reserved. 邹海清|电子科成
+               
             </div>
         </div>
     </div>
